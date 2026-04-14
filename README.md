@@ -10,6 +10,14 @@
 - 💾 **智能命名** - 自动根据日期和尺寸生成文件名
 - 🎨 **友好界面** - 美观的加载提示和设置面板
 
+## 效果展示
+
+### 基础下载功能
+![基础下载](screenshots/Snipaste_2026-04-14_10-19-51.jpg)
+
+### 高级下载设置
+![高级下载](screenshots/Snipaste_2026-04-14_10-20-14.jpg)
+
 ## 安装方法
 
 1. 安装 [Tampermonkey](https://www.tampermonkey.net/) 浏览器扩展
