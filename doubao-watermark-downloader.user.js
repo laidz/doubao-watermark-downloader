@@ -26,7 +26,7 @@
         previewAsideCollapsedClass: 'w-0',
         dropdownContent: '.semi-dropdown-content',
         menuItems: '[class^="context-menu-item-"]',
-        previewImage: 'img[alt="preview"]',
+        previewImage: 'aside.relative img.object-contain',
         toastWrapper: 'div.semi-toast-innerWrapper',
     };
 
