@@ -361,6 +361,8 @@
         btn.className = copyItem.className;
         btn.innerHTML = iconText(ICONS.download, TEXTS.buttonText);
         btn.style.cssText = 'cursor: pointer;';
+        btn.addEventListener('mousedown', (e) => { e.stopPropagation(); });
+        btn.addEventListener('mouseup', (e) => { e.stopPropagation(); });
         btn.addEventListener('click', handleDownload);
 
         const advancedBtn = document.createElement('div');
@@ -368,7 +370,12 @@
         advancedBtn.className = copyItem.className;
         advancedBtn.innerHTML = iconText(ICONS.settings, TEXTS.advancedButtonText);
         advancedBtn.style.cssText = 'cursor: pointer;';
+        advancedBtn.addEventListener('mousedown', (e) => { e.stopPropagation(); });
+        advancedBtn.addEventListener('mouseup', (e) => { e.stopPropagation(); });
         advancedBtn.addEventListener('click', handleAdvancedDownload);
+
+        // 保存当前复制菜单项的引用，防止右键菜单关闭后找不到
+        window.__doubaoCopyMenuItem = copyItem;
 
         copyItem.before(advancedBtn);
         advancedBtn.before(btn);
@@ -376,7 +383,11 @@
 
     async function autoClickCopyButton() {
         try {
-            const copyItem = findCopyMenuItem();
+            let copyItem = findCopyMenuItem();
+            if (!copyItem) {
+                // 菜单可能已关闭，尝试使用之前缓存的引用
+                copyItem = window.__doubaoCopyMenuItem;
+            }
             if (!copyItem) return false;
 
             copyItem.click();
@@ -390,11 +401,13 @@
     }
 
     function resetCopySuccessState() {
-        const existingToast = document.querySelector(SELECTORS.toastWrapper);
-        if (!existingToast || !existingToast.textContent.includes(TEXTS.copySuccess)) return;
-
-        const toastWrapper = existingToast.closest('.semi-toast-wrapper');
-        (toastWrapper || existingToast).remove();
+        const toasts = document.querySelectorAll(SELECTORS.toastWrapper);
+        for (const toast of toasts) {
+            if (toast.textContent.includes(TEXTS.copySuccess)) {
+                const wrapper = toast.closest('.semi-toast-wrapper');
+                (wrapper || toast).remove();
+            }
+        }
     }
 
     function waitForCopySuccess(timeoutMs) {
@@ -570,6 +583,8 @@
     }
 
     async function handleDownload(e) {
+        e.stopPropagation();
+        e.preventDefault();
         if (isProcessing) return;
         isProcessing = true;
 
@@ -612,6 +627,8 @@
     }
 
     async function handleAdvancedDownload(e) {
+        e.stopPropagation();
+        e.preventDefault();
         if (isProcessing) return;
         isProcessing = true;
 
